@@ -34,4 +34,13 @@ const hashPassword = async (req, res, next) => {
   }
 };
 
-module.exports = { authenticateToken, hashPassword };
+const checkRole = (roles) => (req, res, next) => {
+  if (!roles.includes(req.user.role)) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  next();
+};
+
+
+
+module.exports = { authenticateToken, hashPassword, checkRole };
