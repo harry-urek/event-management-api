@@ -6,7 +6,10 @@ const { authenticateToken } = require("./middlewares/securityMiddleware.");
 
 const app = express();
 
-app.use([json(), urlencoded({ extended: true })]);
+app.use([json(), urlencoded({ extended: true }), cors(), helmet(), morgan("dev")]);
+app.get("/", (req, res) => {
+    res.send("Welcome to the User Management API");
+});
 
 app.use("/users", userRoutes);
 app.use("/news", newsRoutes);
