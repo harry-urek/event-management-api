@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const eventModel = require('../models/eventModel');
+const { checkRole } = require('../middlewares/securityMiddleware');
+const { validateEventId } = require('../middlewares/idValidation');
 const { validateEvent } = require('../utils/validation');
 const { sendRegistrationEmail } = require('../utils/emailService');
 
-router.post('/', async (req, res) => {
+router.post('/', checkRole(['organizer']), async (req, res) => {
     try {
         const { error } = validateEvent(req.body);
         if (error) return res.status(400).json({ error: error.message });
@@ -29,7 +31,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.post('/:eventId', async (req, res) => {
+router.post('/:eventId', validateEventId, async (req, res) => {
     try {
         const event = await eventModel.addParticipant(req.params.eventId, req.user.id);
         if (!event) return res.status(404).json({ error: 'Event not found' });
@@ -41,7 +43,7 @@ router.post('/:eventId', async (req, res) => {
     }
 });
 
-router.put('/:eventId', async (req, res) => {
+router.put('/:eventId', validateEventId, checkRole(['organizer']), async (req, res) => {
     try {
         const existingEvent = await eventModel.getById(req.params.eventId);
         if (!existingEvent) return res.status(404).json({ error: 'Event not found' });
@@ -67,14 +69,14 @@ router.put('/:eventId', async (req, res) => {
     }
 });
 
-router.delete('/:eventId', async (req, res) => {
+router.delete('/:eventId', checkRole(['organizer']), async (req, res) => {
     try {
         const existingEvent = await eventModel.getById(req.params.eventId);
         if (!existingEvent) return res.status(404).json({ error: 'Event not found' });
-        // Delete the event
+
         await eventModel.delete(req.params.eventId);
 
-        res.status(204).send(); // 204 No Content for successful deletion
+        res.status(204).send();
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }

@@ -1,10 +1,29 @@
 const JSONStorage = require("./jsonStorage");
-const { v4: uuidv4 } = require("uuid");
+const IdManager = require("../utils/idManager");
 
 class DB {
-  constructor(fileName) {
-    this.storage = new JSONStorage(`${fileName}.json`);
+
+  constructor(entityType) {
+    this.storage = new JSONStorage(`${entityType}s.json`);
+    this.entityType = entityType;
   }
+
+  async create(data) {
+    return this.storage.withLock(async () => {
+      const items = await this.storage.readFile();
+      const id = IdManager.generateId(this.entityType);
+      const newItem = {
+        id,
+        ...data,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      items.push(newItem);
+      await this.storage.writeFile(items);
+      return newItem;
+    });
+  }
+
 
   async getAll() {
     return this.storage.withLock(async () => {
@@ -17,20 +36,7 @@ class DB {
     return items.find((item) => item.id === id);
   }
 
-  async create(item) {
-    return this.storage.withLock(async () => {
-      const items = await this.storage.readFile();
-      const newItem = {
-        id: uuidv4(),
-        ...item,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      items.push(newItem);
-      await this.storage.writeFile(items);
-      return newItem;
-    });
-  }
+
 
   async update(id, updates) {
     return this.storage.withLock(async () => {
@@ -53,11 +59,13 @@ class DB {
   async delete(id) {
     return this.storage.withLock(async () => {
       const items = await this.storage.readFile();
-      const filteredItems = items.filter((item) => item.id !== id);
+      const filteredItems = items.filter(item => item.id !== id);
       await this.storage.writeFile(filteredItems);
+      IdManager.removeId(id, this.entityType);
       return true;
     });
   }
+
 }
 
 module.exports = DB;

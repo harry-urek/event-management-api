@@ -21,6 +21,9 @@ class EventModel extends DB {
         const events = await this.getAll();
         return events.filter(event => event.organizerId === organizerId);
     }
+    async verifyId(id) {
+        return IdManager.exists(id, 'event');
+    }
 }
 
 module.exports = new EventModel

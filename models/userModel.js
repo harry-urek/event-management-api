@@ -1,5 +1,6 @@
 const DB = require('../db/dbManager');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
+const IdManager = require('../utils/idManager');
 
 class UserModel extends DB {
     constructor() {
@@ -18,6 +19,13 @@ class UserModel extends DB {
     async findByEmail(email) {
         const users = await this.getAll();
         return users.find(user => user.email === email);
+    }
+    async verifyId(id) {
+        return IdManager.verifyId(id);
+    }
+    async comparePassword(id, candidatePassword) {
+        const user = await this.getById(id);
+        return bcrypt.compare(candidatePassword, user.password);
     }
 
 }
