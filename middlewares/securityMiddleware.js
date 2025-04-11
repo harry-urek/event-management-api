@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { userModel } = require("../models/userModel");
 require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -14,7 +15,7 @@ const authenticateToken = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.decodedToken = decoded;
+    req.user = userModel.getById(decoded.id);
     next();
   } catch (err) {
     return res.status(403).json({ error: "Invalid Token or Expired Token" });

@@ -4,7 +4,7 @@ const IdManager = require("../utils/idManager");
 class DB {
 
   constructor(entityType) {
-    this.storage = new JSONStorage(`${entityType}s.json`);
+    this.storage = new JSONStorage(`${entityType}.json`);
     this.entityType = entityType;
   }
 

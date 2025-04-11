@@ -1,0 +1,29 @@
+[
+  {
+    "id": "m9d87dxz-1lx5f",
+    "name": "Event Organizer",
+    "email": "organizer@example.com",
+    "password": "$2b$10$zr.tYzKzG4PBL7PvEn2/2OUHrBm4IyxRltKVuQ7LYjhdvvvYysasm",
+    "role": "organizer",
+    "createdAt": "2025-04-11T20:14:53.015Z",
+    "updatedAt": "2025-04-11T20:14:53.016Z"
+  },
+  {
+    "id": "m9d8a1hm-3xpjm",
+    "name": "Event Organizer",
+    "email": "organizer@example2.com",
+    "password": "$2b$10$h0oRPFrphlesFkvKRaSdWexc5iRMxLdrolGZ7vVtUUmexFDL/0Amm",
+    "role": "organizer",
+    "createdAt": "2025-04-11T20:16:56.842Z",
+    "updatedAt": "2025-04-11T20:16:56.842Z"
+  },
+  {
+    "id": "m9d8dd3y-qavo5",
+    "name": "Event Organizer",
+    "email": "organizer@example3.com",
+    "password": "$2b$10$68PX7eVbvkYGkEdoIAnLc.F/vB01xOSKfEVWdozMj0IfswdHRJ1fm",
+    "role": "organizer",
+    "createdAt": "2025-04-11T20:19:31.870Z",
+    "updatedAt": "2025-04-11T20:19:31.870Z"
+  }
+]

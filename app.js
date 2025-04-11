@@ -15,6 +15,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRoutes);
-app.use("/event", authenticateToken, eventRoutes);
+app.use("/events", authenticateToken, eventRoutes);
 
 module.exports = app;
